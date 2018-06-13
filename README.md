@@ -5,15 +5,15 @@ Horch is a Python toy project inspired by PyTorch that provides one main feature
 
 ## Requirements
 - Python 3 (only 3.6 is tested)
-- numpy
+- NumPy
 - pytest (for test)
-- sklearn (to run examples)
+- scikit-learn (to run examples)
 
 ## Examples
-You can see some examples in examples.
+You can see some examples in [examples](https://github.com/sbl1996/horch/tree/master/examples).
 
-- iris
-- mnist
+- [iris](https://github.com/sbl1996/horch/blob/master/examples/iris.py)
+- [mnist](https://github.com/sbl1996/horch/blob/master/examples/mnist.py)
 
 
 ## Operators
