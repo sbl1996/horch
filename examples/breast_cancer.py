@@ -1,4 +1,4 @@
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
 import horch as H
@@ -7,18 +7,18 @@ from horch.optim import SGD
 
 from hidden_net import HiddenNet
 
-iris = load_iris()
-X = iris.data
-y = iris.target
+bre = load_breast_cancer()
+X = bre.data
+y = bre.target
 
 x, mean, std = standardize(X)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 
-net = HiddenNet(4, 10, 3)
+net = HiddenNet(30, 10, 1)
 optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
 
-epochs = 30
+epochs = 20
 for epoch in range(epochs):
   batches = split(x_train, y_train, 8)
   for batch in batches:
@@ -28,11 +28,11 @@ for epoch in range(epochs):
 
     net.zero_grad()
     output = net(inputs)
-    loss = H.CrossEntropyLoss(output, target)
+    loss = H.BCELoss(output, target)
     loss.backward()
     optimizer.step()
-train_loss, train_acc = evaluate(net, x_train, y_train)
-test_loss, test_acc = evaluate(net, x_test, y_test)
+train_loss, train_acc = evaluate(net, x_train, y_train, binary=True)
+test_loss, test_acc = evaluate(net, x_test, y_test, binary=True)
 print("%d Epochs." % epochs)
 print("Training set:")
 print("Loss: %.4f   Accuracy: %.2f" % (train_loss, train_acc))

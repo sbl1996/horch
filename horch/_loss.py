@@ -4,7 +4,7 @@ import horch as _H
 def BCELoss(logits, target):
   y = target
   z = logits
-  return _H.mean(_H.maximum(z, 0) + _H.log(1 + _H.exp(-_H.abs(z))) - y*z)
+  return _H.mean(_H.maximum(z, 0) + _H.log(1 + _H.exp(-_H.abs(z))) - z*y)
 
 def CrossEntropyLoss(inputs, target):
   """
