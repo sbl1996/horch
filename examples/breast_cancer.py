@@ -11,7 +11,7 @@ bre = load_breast_cancer()
 X = bre.data
 y = bre.target
 
-x, mean, std = standardize(X)
+x = X
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 

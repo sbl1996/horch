@@ -14,6 +14,8 @@ You can see some examples in [examples](https://github.com/sbl1996/horch/tree/ma
 
 - [iris](https://github.com/sbl1996/horch/blob/master/examples/iris.py)
 - [mnist](https://github.com/sbl1996/horch/blob/master/examples/mnist.py)
+- [breast_cancer](https://github.com/sbl1996/horch/blob/master/examples/breast_cancer.py)
+- [cifar10](https://github.com/sbl1996/horch/blob/master/examples/cifar10.py)
 
 
 ## Operators
@@ -21,21 +23,24 @@ Operators below are implemented, but only some of them are tested.
 
 - abs 
 - add
+- div
 - exp
 - getitem
 - log (*Untested*)
 - matmul
 - max (*Untested*)
 - maximum
-- mean (*Untested*)
+- mean
 - mul
 - neg
 - relu (*Untested*)
 - reshape (*Untested*)
 - sigmoid (*Untested*)
-- softmax (*Untested*)
+- sqrt
+- std
 - sub 
-- sum (*Untested*)
+- sum
+- var
 
 ## Modules
 Horch consists of the following components:
@@ -43,7 +48,7 @@ Horch consists of the following components:
 - horch: tensor and operators on it
 - optim: optimizers to train network (now only SGD)
 - layers: common deep neural network components
-- utils: miscellaneous functions for data preprocessing, model evaluating and others
+- utils: misc for data preparing and model evaluating
 
 ## Imports
 Import statements below are recommended.

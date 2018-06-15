@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
-from ..tensor import Tensor
-from .._parameter import Parameter
+from horch import Tensor
+from horch import Parameter
 
 class Module:
 

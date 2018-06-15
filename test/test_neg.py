@@ -7,4 +7,4 @@ def test_neg():
   t2 = -t1
   t2.sum().backward()
   grad = dm('-1 -1')
-  assert np.array_equal(t1.grad, grad)
+  np.testing.assert_allclose(t1.grad, grad)

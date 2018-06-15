@@ -1,3 +1,5 @@
+import argparse
+
 import numpy as np
 from sklearn.datasets import fetch_mldata
 from sklearn.model_selection import train_test_split
@@ -8,25 +10,31 @@ from horch.optim import SGD
 
 from hidden_net import HiddenNet
 
+parser = argparse.ArgumentParser(description='Horch MNIST Training')
+parser.add_argument('--batch-norm', '-bn', action='store_true', help='enable batch normalization')
+args = parser.parse_args()
+
 DATA_HOME = 'D:\\MLCode\\datasets'
 mnist = fetch_mldata('MNIST original', data_home=DATA_HOME)
-X = mnist.data / 255
+X = mnist.data
 y = mnist.target.astype(np.int)
 
-m_train = 10000
-m_val = 500
-m_test = 1000
-train_indices = np.random.choice(60000, size=m_train, replace=False)
-val_indices = np.random.choice(60000, size=m_val, replace=False)
-test_indices = np.random.choice(10000, size=m_test, replace=False) + 60000
-x_train = X[train_indices]
-y_train = y[train_indices]
-x_val = X[val_indices]
-y_val = y[val_indices]
-x_test = X[test_indices]
-y_test = y[test_indices]
+indices = np.random.permutation(len(X))
+X = X[indices]
+y = y[indices]
 
-net = HiddenNet(784, 100, 10)
+X = X / 255
+
+m_train = 60000
+m_test = 10000
+x_train = X[:m_train]
+y_train = y[:m_train]
+x_val = X[m_train:]
+y_val = y[m_train:]
+x_test = X[60000: 60000 + m_test]
+y_test = y[60000: 60000 + m_test]
+
+net = HiddenNet(784, 100, 10, args.batch_norm)
 optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
 
 batch_size = 32
@@ -36,7 +44,7 @@ for epoch in range(epochs):
   batches = split(x_train, y_train, batch_size)
   for batch in batches:
     inputs, target = batch
-    inputs = H.tensor(inputs.reshape(-1, 784))
+    inputs = H.tensor(inputs)
     target = H.tensor(target)
 
     net.zero_grad()

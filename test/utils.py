@@ -12,5 +12,8 @@ def dm(s, **kwargs):
   f = StringIO(s.replace(';', '\n'))
   return np.genfromtxt(f, **kwargs)
 
+# def gtensor(data):
+#   horch.tensor(data, requires_grad=True)
+
 def gtensor(data):
   return horch.tensor(data, requires_grad=True)

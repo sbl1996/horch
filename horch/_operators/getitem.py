@@ -14,6 +14,7 @@ class GetItem(Operator):
       for i in range(len(ind)):
         if isinstance(ind[i], Tensor):
           ind[i] = ind[i].data
+      ind = tuple(ind)
     elif isinstance(ind, Tensor):
       ind = ind.data
     return ind

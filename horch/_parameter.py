@@ -1,4 +1,4 @@
-from .tensor import Tensor
+from horch.tensor import Tensor
 
 class Parameter(Tensor):
 

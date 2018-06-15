@@ -17,16 +17,26 @@ class Tensor:
     return self.data.shape
 
   def backward(self):
-    size = self.size()
-    if size != ():
+    size = self.data.size
+    if size != 1:
       raise RuntimeError("grad can be created only for scalar outputs")
     self.op._backward(np.array(1, dtype=self.data.dtype))
 
   def zero_grad(self):
     self.op.zero_grad()
 
+  @property
+  def shape(self):
+    return self.data.shape
+
   def item(self):
     return self.data.item()
+
+  def __truediv__(self, rt):
+    return _op.div(self, rt)
+
+  def __rtruediv__(self, lt):
+    return _op.div(lt, self)
 
   def __len__(self):
     return len(self.data)
@@ -38,77 +48,69 @@ class Tensor:
     return self.__str__()
 
   def __add__(self, rt):
-    from ._op import add
-    return add(self, rt)
+    return _op.add(self, rt)
 
   def __radd__(self, lt):
-    from ._op import add
-    return add(lt, self)
+    return _op.add(lt, self)
 
   def __mul__(self, rt):
-    from ._op import mul
-    return mul(self, rt)    
+    return _op.mul(self, rt)    
 
   def __rmul__(self, lt):
-    from ._op import mul
-    return mul(lt, self)
+    return _op.mul(lt, self)
 
   def __sub__(self, rt):
-    from ._op import sub
-    return sub(self, rt)
+    return _op.sub(self, rt)
 
   def __rsub__(self, lt):
-    from ._op import sub
-    return sub(lt, self)
+    return _op.sub(lt, self)
 
   def __neg__(self):
-    from ._op import neg
-    return neg(self)
+    return _op.neg(self)
 
   def __matmul__(self, rt):
-    from ._op import matmul
-    return matmul(self, rt)
+    return _op.matmul(self, rt)
 
   def __getitem__(self, *args):
-    from ._op import getitem
-    return getitem(self, *args)
-
-  def sum(self, axis=0):
-    from ._op import sum
-    return sum(self, axis=axis)
+    return _op.getitem(self, *args)
 
   def relu(self):
-    from ._op import relu
-    return relu(self)
+    return _op.relu(self)
 
   def sigmoid(self):
-    from ._op import sigmoid
-    return sigmoid(self)
+    return _op.sigmoid(self)
 
   def log(self):
-    from ._op import log
-    return log(self)  
+    return _op.log(self)  
 
   def abs(self):
-    from ._op import abs
-    return abs(self)
+    return _op.abs(self)
 
   def exp(self):
-    from ._op import exp
-    return exp(self)
+    return _op.exp(self)
 
   def maximum(self, rt):
-    from ._op import maximum
-    return maximum(self, rt)
+    return _op.maximum(self, rt)
 
-  def mean(self, axis=None):
-    from ._op import mean
-    return mean(self, axis)
+  def mean(self, axis=None, keepdims=False):
+    return _op.mean(self, axis, keepdims)
 
   def max(self, axis=None, keepdims=False):
-    from ._op import max
-    return max(self, axis, keepdims)
+    return _op.max(self, axis, keepdims)
 
   def reshape(self, *shapes):
-    from ._op import reshape
-    return reshape(self, shapes)
+    return _op.reshape(self, shapes)
+
+  def sqrt(self):
+    return _op.sqrt(self)
+
+  def std(self, axis=None, keepdims=False):
+    return _op.std(self, axis=axis, keepdims=keepdims)
+
+  def sum(self, axis=None, keepdims=False):
+    return _op.sum(self, axis=axis, keepdims=keepdims)
+
+  def var(self, axis=None, keepdims=False):
+    return _op.var(self, axis=axis, keepdims=keepdims)
+
+import horch._op as _op

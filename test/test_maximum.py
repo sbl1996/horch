@@ -11,8 +11,8 @@ def test_maximum():
   (t1.maximum(t2) * k).sum().backward()
   grad1 = dm('4 0')
   grad2 = dm('0 6')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
   # matrix add matrix
   t1 = gtensor(dm('1 2 3; 5 6 7'))
@@ -22,8 +22,8 @@ def test_maximum():
   (t1.maximum(t2) * k).sum().backward()
   grad1 = dm('0 0 0; 4 5 6')
   grad2 = dm('1 2 3; 0 0 0')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
   # matrix add vector
   t1 = gtensor(dm('2 2 2; 3 4 5'))
@@ -32,8 +32,8 @@ def test_maximum():
   (t1.maximum(t2) * k).sum().backward()
   grad1 = dm('0 0 0; 4 0 6')
   grad2 = dm('1 7 3')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
   # matrix add scalar
   t1 = gtensor(dm('1 2 3; 3 4 5'))
@@ -43,8 +43,8 @@ def test_maximum():
   (t1.maximum(t2) * k).sum().backward()
   grad1 = dm('0 0 3; 4 5 6')
   grad2 = dm('3')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
   # vector add scalar
   t1 = gtensor(dm('1 2 3'))
@@ -54,5 +54,5 @@ def test_maximum():
   (t1.maximum(t2) * k).sum().backward()
   grad1 = dm('0 0 6')
   grad2 = dm('9')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)

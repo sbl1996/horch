@@ -1,4 +1,4 @@
-from ..tensor import Tensor
+from horch.tensor import Tensor
 
 class Operator:
 
@@ -14,9 +14,6 @@ class Operator:
     else: # Leaf
       self.tensor = None
 
-  def forward(self):
-    pass
-
   def _backward(self, acc):
     data = [ p.tensor.data for p in self.parents ]
     grads = self.backward(acc, *data, *self.args)
@@ -25,9 +22,6 @@ class Operator:
     if self.parents:
       for p, grad in zip(self.parents, grads):
         p._backward(grad)
-
-  def backward(self, acc):
-    pass
 
   def zero_grad(self):
     self.tensor.grad = None

@@ -7,4 +7,4 @@ def test_exp():
   t2 = t1.exp()
   t2.sum().backward()
   grad = t2.data.copy()
-  assert np.array_equal(t1.grad, grad)
+  np.testing.assert_allclose(t1.grad, grad)

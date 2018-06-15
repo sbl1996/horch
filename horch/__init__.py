@@ -1,7 +1,7 @@
-from .tensor import Tensor
-from ._op import *
-from ._parameter import Parameter
-from ._loss import *
+from horch.tensor import Tensor
+from horch._op import *
+from horch._parameter import Parameter
+from horch._loss import *
 
 def tensor(data, requires_grad=False):
   return Tensor(data, requires_grad=requires_grad)

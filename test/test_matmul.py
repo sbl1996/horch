@@ -9,8 +9,8 @@ def test_matmul_matrix():
   (t1 @ t2).sum().backward()
   grad1 = dm('18 26 10; 18 26 10')
   grad2 = dm('4 4 4 4; 6 6 6 6; 8 8 8 8')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
 def test_matrix_vector():
   # (2, 3) @ (3,)
@@ -19,8 +19,8 @@ def test_matrix_vector():
   (t1 @ t2).sum().backward()
   grad1 = dm('4 4 6; 4 4 6')
   grad2 = dm('4 6 8')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
 def test_vector_matrix():
   # (2, 3) @ (3,)
@@ -29,8 +29,8 @@ def test_vector_matrix():
   (t1 @ t2).sum().backward()
   grad1 = dm('6 12')
   grad2 = dm('4 4 4; 9 9 9')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)
 
 def test_vector_vector():
   # (3,) @ (3,)
@@ -39,5 +39,5 @@ def test_vector_vector():
   (t1 @ t2).sum().backward()
   grad1 = dm('8 2 5')
   grad2 = dm('4 9 3')
-  assert np.array_equal(t1.grad, grad1)
-  assert np.array_equal(t2.grad, grad2)  
+  np.testing.assert_allclose(t1.grad, grad1)
+  np.testing.assert_allclose(t2.grad, grad2)  

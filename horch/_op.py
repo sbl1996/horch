@@ -1,5 +1,7 @@
-from . import _operators
-from .utils import check_tensor as _check_tensor
+# pylint: disable=W0622
+
+import horch._operators as _operators
+from horch.utils import check_tensor as _check_tensor
 
 def abs(t):
   t = _check_tensor(t)
@@ -11,6 +13,12 @@ def add(lt, rt):
   rt = _check_tensor(rt)
   op = _operators.Add([lt.op, rt.op])
   return op.tensor
+
+def div(lt, rt):
+  lt = _check_tensor(lt)
+  rt = _check_tensor(rt)
+  op = _operators.Div([lt.op, rt.op])
+  return op.tensor  
 
 def exp(t):
   t = _check_tensor(t)
@@ -27,15 +35,10 @@ def log(t):
   op = _operators.Log([t.op])
   return op.tensor
 
-def mean(t, axis=None):
-  t = _check_tensor(t)
-  op = _operators.Mean([t.op], axis)
-  return op.tensor
-
-def mul(lt, rt):
+def matmul(lt, rt):
   lt = _check_tensor(lt)
   rt = _check_tensor(rt)
-  op = _operators.Mul([lt.op, rt.op])
+  op = _operators.MatMul([lt.op, rt.op])
   return op.tensor
 
 def maximum(lt, rt):
@@ -44,15 +47,20 @@ def maximum(lt, rt):
   op = _operators.Maximum([lt.op, rt.op])
   return op.tensor
 
-def matmul(lt, rt):
-  lt = _check_tensor(lt)
-  rt = _check_tensor(rt)
-  op = _operators.MatMul([lt.op, rt.op])
-  return op.tensor
-
 def max(t, axis=None, keepdims=False):
   t = _check_tensor(t)
   op = _operators.Max([t.op], axis, keepdims)
+  return op.tensor
+
+def mean(t, axis=None, keepdims=False):
+  t = _check_tensor(t)
+  op = _operators.Mean([t.op], axis, keepdims)
+  return op.tensor
+
+def mul(lt, rt):
+  lt = _check_tensor(lt)
+  rt = _check_tensor(rt)
+  op = _operators.Mul([lt.op, rt.op])
   return op.tensor
 
 def neg(t):
@@ -68,11 +76,22 @@ def relu(t):
 def reshape(t, *shapes):
   t = _check_tensor(t)
   op = _operators.Reshape([t.op], shapes)
-  return op.tensor  
+  return op.tensor
 
-def sum(t, axis=0):
+
+def sigmoid(t):
   t = _check_tensor(t)
-  op = _operators.Sum([t.op], axis)
+  op = _operators.Sigmoid([t.op])
+  return op.tensor
+
+def sqrt(t):
+  t = _check_tensor(t)
+  op = _operators.Sqrt([t.op])
+  return op.tensor
+
+def std(t, axis=None, keepdims=False):
+  t = _check_tensor(t)
+  op = _operators.Std([t.op], axis, keepdims)
   return op.tensor
 
 def sub(lt, rt):
@@ -81,7 +100,12 @@ def sub(lt, rt):
   op = _operators.Sub([lt.op, rt.op])
   return op.tensor
 
-def sigmoid(t):
+def sum(t, axis=None, keepdims=False):
   t = _check_tensor(t)
-  op = _operators.Sigmoid([t.op])
+  op = _operators.Sum([t.op], axis, keepdims)
+  return op.tensor
+
+def var(t, axis=None, keepdims=False):
+  t = _check_tensor(t)
+  op = _operators.Var([t.op], axis, keepdims)
   return op.tensor
