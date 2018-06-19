@@ -5,7 +5,7 @@ import horch as H
 from horch.utils import standardize, split, evaluate
 from horch.optim import SGD
 
-from hidden_net import HiddenNet
+from models import MLP
 
 bre = load_breast_cancer()
 X = bre.data
@@ -15,7 +15,7 @@ x = X
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
 
-net = HiddenNet(30, 10, 1)
+net = MLP([30, 'bn', 'relu', 10, 'bn', 'relu', 1])
 optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
 
 epochs = 20

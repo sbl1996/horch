@@ -8,7 +8,7 @@ import horch as H
 from horch.utils import standardize, split, evaluate
 from horch.optim import SGD
 
-from hidden_net import HiddenNet
+from models import MLP
 
 parser = argparse.ArgumentParser(description='Horch MNIST Training')
 parser.add_argument('--batch-norm', '-bn', action='store_true', help='enable batch normalization')
@@ -23,8 +23,6 @@ indices = np.random.permutation(len(X))
 X = X[indices]
 y = y[indices]
 
-X = X / 255
-
 m_train = 60000
 m_test = 10000
 x_train = X[:m_train]
@@ -34,7 +32,7 @@ y_val = y[m_train:]
 x_test = X[60000: 60000 + m_test]
 y_test = y[60000: 60000 + m_test]
 
-net = HiddenNet(784, 100, 10, args.batch_norm)
+net = MLP([784, 'bn', 'relu', 100, 'bn', 'relu', 10])
 optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
 
 batch_size = 32
@@ -43,12 +41,13 @@ for epoch in range(epochs):
   print("Epoch %d" % epoch)
   batches = split(x_train, y_train, batch_size)
   for batch in batches:
-    inputs, target = batch
-    inputs = H.tensor(inputs)
+    input, target = batch
+    input = input.reshape(input.shape[0], -1)
+    input = H.tensor(input)
     target = H.tensor(target)
 
     net.zero_grad()
-    output = net(inputs)
+    output = net(input)
     loss = H.CrossEntropyLoss(output, target)
     loss.backward()
     optimizer.step()

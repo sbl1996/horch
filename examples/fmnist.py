@@ -1,6 +1,6 @@
 import numpy as np
 from torchvision import datasets
-from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip
+from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip, Pad
 from torch.utils.data import DataLoader, Dataset
 
 import horch as H
@@ -24,27 +24,27 @@ class Subset(Dataset):
     return self.dataset[self.indices[idx]]
 
 train_transform = Compose([
+  Pad(2),
   ToTensor(),
-  Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
 test_transform = Compose([
+  Pad(2),
   ToTensor(),
-  Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-CIFAR_DATA_HOME = 'D:\MLCode\datasets\CIFAR10'
-cifar_train = datasets.CIFAR10(CIFAR_DATA_HOME, train=True, transform=train_transform, download=True)
-cifar_test = datasets.CIFAR10(CIFAR_DATA_HOME, train=False, transform=test_transform, download=True)
+FMNIST_DATA_HOME = 'D:\MLCode\datasets\FashionMNIST'
+fmnist_train = datasets.FashionMNIST(FMNIST_DATA_HOME, train=True, transform=train_transform, download=True)
+fmnist_test = datasets.FashionMNIST(FMNIST_DATA_HOME, train=False, transform=test_transform, download=True)
 
 m = 5000
-train_data = Subset(cifar_train, m)
-val_data = Subset(cifar_train, np.arange(m, m + 200))
-val_data2 = Subset(cifar_train, np.arange(m - 200, m))
-test_data = cifar_test
+train_data = Subset(fmnist_train, m)
+val_data = Subset(fmnist_train, np.arange(m, m + 200))
+val_data2 = Subset(fmnist_train, np.arange(m - 200, m))
+test_data = fmnist_test
 
-net = LeNetPlus()
-optimizer = SGD(net.parameters(), lr=0.001, momentum=0.9)
+net = LeNetPlus(in_channels=1)
+optimizer = SGD(net.parameters(), lr=0.003, momentum=0.9, weight_decay=5e-4)
 
 batch_size = 32
 data_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
