@@ -3,11 +3,13 @@ from collections import OrderedDict
 from horch import Tensor
 from horch import Parameter
 
-class Module:
+class Module(object):
 
   def __init__(self):
+    super().__init__()
     self._parameters = OrderedDict()
     self._children = OrderedDict()
+    self.training = True
 
   def __call__(self, *args, **kwargs):
     return self.forward(*args, **kwargs)
@@ -35,6 +37,21 @@ class Module:
   def children(self):
     for name, child in self.named_children():
       yield child
+
+  def register_child(self, name, module):
+    if not isinstance(module, Module):
+      raise ValueError("only Module can be registered by this method")
+    self._children[name] = module
+
+  def train(self):
+    self.training = True
+    for child in self.children():
+      child.train()
+
+  def eval(self):
+    self.training = False
+    for child in self.children():
+      child.eval()
 
   def __setattr__(self, name, value):
     params = self.__dict__.get('_parameters')

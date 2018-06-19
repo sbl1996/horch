@@ -6,7 +6,7 @@ from ..tensor import Tensor
 class GetItem(Operator):
 
   def __init__(self, parents, *args):
-    super(GetItem, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def _transform_indices(self, ind):
     if isinstance(ind, tuple):

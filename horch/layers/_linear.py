@@ -8,7 +8,7 @@ def kaiming_normal(n_in, n_out):
 class Linear(Module):
 
   def __init__(self, n_in, n_out, bias=True):
-    super(Linear, self).__init__()
+    super().__init__()
     self.n_in = n_in
     self.n_out = n_out
     self.weight = Parameter(kaiming_normal(n_in, n_out))

@@ -3,7 +3,7 @@ from .operator import Operator
 class Leaf(Operator):
 
   def __init__(self, tensor, requires_grad):
-    super(Leaf, self).__init__([], [], requires_grad)
+    super().__init__([], [], requires_grad=requires_grad)
     self.tensor = tensor
 
   def backward(self, acc):

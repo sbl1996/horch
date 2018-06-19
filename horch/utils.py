@@ -2,6 +2,8 @@ import numpy as _np
 import horch as _H
 
 def check_tensor(t):
+  if t is None:
+    return None
   if not isinstance(t, _H.Tensor):
     if not isinstance(t, _np.ndarray):
       t = _np.array(t)
@@ -16,6 +18,7 @@ def evaluate(net, x, y, binary=False):
       y: (num_samples,) for binary label, or
          (num_samples, num_classes) for multiclass label
   """
+  net.eval()
   x = _H.tensor(x)
   out = net(x)
   if binary:
@@ -27,6 +30,7 @@ def evaluate(net, x, y, binary=False):
     criterian = _H.CrossEntropyLoss
   loss = criterian(out, y).item()
   acc = _np.mean(pred == y)
+  net.train()
   return loss, acc
 
 def evaluate_dataset(net, dataset, batch_size=32):
@@ -37,6 +41,7 @@ def evaluate_dataset(net, dataset, batch_size=32):
       y: (num_samples,) for binary label, or
          (num_samples, num_classes) for multiclass label
   """
+  net.eval()
   from torch.utils.data import DataLoader
   data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
   n_correct = 0
@@ -54,6 +59,7 @@ def evaluate_dataset(net, dataset, batch_size=32):
     loss_avg = (loss_avg * (i - 1) + loss) / i
     pred = _np.argmax(output.data, axis=1)
     n_correct += (pred == labels.data).sum()
+  net.train()
   return n_correct / len(dataset), loss_avg
 
 def split(x, y, batch_size, shuffle=True):

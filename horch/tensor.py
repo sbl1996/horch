@@ -1,8 +1,9 @@
 import numpy as np
 
-class Tensor:
+class Tensor(object):
 
   def __init__(self, data, requires_grad=False):
+    super().__init__()
     self.data = data
     self.grad = None
     self.requires_grad = requires_grad
@@ -13,12 +14,12 @@ class Tensor:
     import torch
     return torch.tensor(self.data.copy(), requires_grad=self.requires_grad)
 
+  @property
   def size(self):
     return self.data.shape
 
   def backward(self):
-    size = self.data.size
-    if size != 1:
+    if self.data.size != 1:
       raise RuntimeError("grad can be created only for scalar outputs")
     self.op._backward(np.array(1, dtype=self.data.dtype))
 
@@ -98,8 +99,11 @@ class Tensor:
   def max(self, axis=None, keepdims=False):
     return _op.max(self, axis, keepdims)
 
-  def reshape(self, *shapes):
-    return _op.reshape(self, shapes)
+  def reshape(self, *args):
+    return _op.reshape(self, *args)
+
+  def view(self, *args):
+    return self.reshape(*args)
 
   def sqrt(self):
     return _op.sqrt(self)

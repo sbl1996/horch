@@ -5,7 +5,7 @@ from .operator import Operator
 class Std(Operator):
 
   def __init__(self, parents, *args):
-    super(Std, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def forward(self, x, axis, keepdims):
     m = np.std(x, axis=axis, keepdims=keepdims, ddof=1)

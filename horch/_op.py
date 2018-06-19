@@ -14,11 +14,34 @@ def add(lt, rt):
   op = _operators.Add([lt.op, rt.op])
   return op.tensor
 
+def conv2d(input, weight, bias=None, stride=1, padding=0):
+  input = _check_tensor(input)
+  weight = _check_tensor(weight)
+  bias = _check_tensor(bias)
+  p = [input.op, weight.op]
+  if bias is None:
+    p.append(None)
+  else:
+    p.append(bias.op)
+  op = _operators.Conv2d(p, stride, padding)
+  return op.tensor
+
+def cross_entropy(logit, target):
+  logit = _check_tensor(logit)
+  target = _check_tensor(target).data
+  op = _operators.CrossEntropy([logit.op], target)
+  return op.tensor
+
 def div(lt, rt):
   lt = _check_tensor(lt)
   rt = _check_tensor(rt)
   op = _operators.Div([lt.op, rt.op])
   return op.tensor  
+
+def dropout(t, p=0.5, training=False):
+  t = _check_tensor(t)
+  op = _operators.Dropout([t.op], p, training)
+  return op.tensor
 
 def exp(t):
   t = _check_tensor(t)
@@ -52,6 +75,11 @@ def max(t, axis=None, keepdims=False):
   op = _operators.Max([t.op], axis, keepdims)
   return op.tensor
 
+def max_pool2d(input, kernel_size, stride=1, padding=0, return_indices=True):
+  input = _check_tensor(input)
+  op = _operators.MaxPool2d([input.op], kernel_size, stride, padding, return_indices)
+  return op.tensor
+
 def mean(t, axis=None, keepdims=False):
   t = _check_tensor(t)
   op = _operators.Mean([t.op], axis, keepdims)
@@ -75,7 +103,7 @@ def relu(t):
 
 def reshape(t, *shapes):
   t = _check_tensor(t)
-  op = _operators.Reshape([t.op], shapes)
+  op = _operators.Reshape([t.op], *shapes)
   return op.tensor
 
 

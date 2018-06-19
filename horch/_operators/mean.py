@@ -5,7 +5,7 @@ from .operator import Operator
 class Mean(Operator):
 
   def __init__(self, parents, *args):
-    super(Mean, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def forward(self, x, axis, keepdims):
     m = np.mean(x, axis=axis, keepdims=keepdims)

@@ -5,7 +5,7 @@ from .operator import Operator
 class Var(Operator):
 
   def __init__(self, parents, *args):
-    super(Var, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def forward(self, x, axis, keepdims):
     m = np.var(x, axis=axis, keepdims=keepdims, ddof=1)

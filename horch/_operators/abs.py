@@ -5,7 +5,7 @@ from .operator import Operator
 class Abs(Operator):
 
   def __init__(self, parents, *args):
-    super(Abs, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def forward(self, x):
     return np.abs(x)

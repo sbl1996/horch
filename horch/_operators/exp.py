@@ -5,7 +5,7 @@ from .operator import Operator
 class Exp(Operator):
 
   def __init__(self, parents, *args):
-    super(Exp, self).__init__(parents, args)
+    super().__init__(parents, args)
 
   def forward(self, x):
     return np.exp(x)
