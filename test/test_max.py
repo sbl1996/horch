@@ -18,21 +18,24 @@ def test_axis():
   grad = dm('0 0 3; 0 0 6')
   np.testing.assert_allclose(t1.grad, grad)
 
-# def test_high_dim():
-#   shape = (2,3,4)
-#   d = [[[ 0,  8,  0,  5],
-#         [ 7,  1,  7,  1],
-#         [ 9,  1,  6,  9]],
-#        [[ 7,  0,  6,  2],
-#         [ 8,  5,  2,  5],
-#         [ 8,  1,  4,  6]]]
-#   a = gtensor(dm(d))
-#   a.max(axis=1).sum().backward()
-#   g = [[[ 0,  8,  0,  5],
-#         [ 7,  1,  7,  1],
-#         [ 9,  1,  6,  9]],
-#        [[ 7,  0,  6,  2],
-#         [ 8,  5,  2,  5],
-#         [ 8,  1,  4,  6]]]
-#   grad = dm(g)
-#   np.testing.assert_allclose(a.grad, grad)
+def test_high_dim():
+  d = [[[ 0,  8,  0,  5],
+        [ 7,  1,  7,  1],
+        [ 9,  1,  6,  9]],
+       [[ 7,  0,  6,  2],
+        [ 8,  5,  2,  5],
+        [ 8,  1,  4,  6]]]
+  a = gtensor(dm(d))
+  a.max(axis=1).sum().backward()
+  print(a.grad)
+  g = [[
+    [ 0.,  1.,  0.,  0.],
+    [ 0.,  0.,  1.,  0.],
+    [ 1.,  0.,  0.,  1.]],
+
+   [[ 0.,  0.,  1.,  0.],
+    [ 1.,  1.,  0.,  0.],
+    [ 0.,  0.,  0.,  1.]]
+  ]
+  grad = dm(g)
+  np.testing.assert_allclose(a.grad, grad)
