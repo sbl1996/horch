@@ -10,7 +10,7 @@ def check_tensor(t):
     t = _H.Tensor(t)
   return t
 
-def evaluate(net, x, y, binary=False):
+def evaluate(net, x, y, binary=False, batch_size=64):
   """
   Args:
       net: model
@@ -19,19 +19,31 @@ def evaluate(net, x, y, binary=False):
          (num_samples, num_classes) for multiclass label
   """
   net.eval()
-  x = _H.tensor(x)
-  out = net(x)
-  if binary:
-    pred = _np.sign(out.data)
-    pred[pred == -1] = 0
-    criterian = _H.BCELoss
-  else:
-    pred = _np.argmax(out.data, axis=1)
-    criterian = _H.CrossEntropyLoss
-  loss = criterian(out, y).item()
-  acc = _np.mean(pred == y)
+  batches = split(x, y, batch_size)
+
+  i = 0
+  loss_avg = 0
+  n_correct = 0
+  for batch in batches:
+    i += 1
+    input, target = batch
+    input = _H.tensor(input)
+    target = _H.tensor(target)
+
+    net.zero_grad()
+    output = net(input)
+    if binary:
+      pred = _np.sign(output.data)
+      pred[pred == -1] = 0
+      criterian = _H.BCELoss
+    else:
+      pred = _np.argmax(output.data, axis=1)
+      criterian = _H.CrossEntropyLoss
+    loss = criterian(output, target).item()
+    loss_avg = (loss_avg * (i-1) + loss) / i
+    n_correct += (pred == target.data).sum()
   net.train()
-  return loss, acc
+  return n_correct / len(x), loss_avg
 
 def evaluate_dataset(net, dataset, batch_size=32):
   """

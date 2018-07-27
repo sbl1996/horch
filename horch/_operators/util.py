@@ -25,3 +25,12 @@ def unpatch(p, h, w, sH, sW, pH, pW, dH=1, dW=1):
       x[:, :, i:(i+oH*sH):sH, j:(j+oW*sW):sW] += p[:, :, :, :, i, j]
   x = x[:, :, pH:h+pH, pW:w+pW]
   return x
+
+def expand_dims(a, dims):
+  s = list(a.shape)
+  if isinstance(dims, int):
+    s.insert(dims, 1)
+  else:
+    for d in dims:
+      s.insert(d, 1)
+  return a.reshape(tuple(s))

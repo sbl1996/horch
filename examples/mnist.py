@@ -23,14 +23,13 @@ indices = np.random.permutation(len(X))
 X = X[indices]
 y = y[indices]
 
-m_train = 60000
-m_test = 10000
+m_train = 59000
 x_train = X[:m_train]
 y_train = y[:m_train]
-x_val = X[m_train:]
-y_val = y[m_train:]
-x_test = X[60000: 60000 + m_test]
-y_test = y[60000: 60000 + m_test]
+x_val = X[m_train:60000]
+y_val = y[m_train:60000]
+x_test = X[60000:]
+y_test = y[60000:]
 
 net = MLP([784, 'bn', 'relu', 100, 'bn', 'relu', 10])
 optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
@@ -38,11 +37,10 @@ optimizer = SGD(net.parameters(), lr=0.01, momentum=0.9)
 batch_size = 32
 epochs = 5
 for epoch in range(epochs):
-  print("Epoch %d" % epoch)
+  print("Epoch %d" % (epoch + 1))
   batches = split(x_train, y_train, batch_size)
   for batch in batches:
     input, target = batch
-    input = input.reshape(input.shape[0], -1)
     input = H.tensor(input)
     target = H.tensor(target)
 
@@ -51,10 +49,10 @@ for epoch in range(epochs):
     loss = H.CrossEntropyLoss(output, target)
     loss.backward()
     optimizer.step()
-  val_loss, val_acc = evaluate(net, x_val, y_val)
+  val_acc, val_loss = evaluate(net, x_val, y_val)
   print("val_loss: %.4f   val_acc: %.2f" % (val_loss, val_acc))
-train_loss, train_acc = evaluate(net, x_train, y_train)
-test_loss, test_acc = evaluate(net, x_test, y_test)
+train_acc, train_loss = evaluate(net, x_train, y_train)
+test_acc, test_loss = evaluate(net, x_test, y_test)
 print("%d Epochs." % epochs)
 print("Training set:")
 print("Loss: %.4f   Accuracy: %.2f" % (train_loss, train_acc))

@@ -15,5 +15,4 @@ class Dropout(Operator):
     return x
 
   def backward(self, acc, x, p, training):
-    # must be called in training
     return acc * self.mask

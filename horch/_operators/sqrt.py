@@ -11,5 +11,5 @@ class Sqrt(Operator):
     return np.sqrt(x)
 
   def backward(self, acc, x):
-    res = self.tensor.data.copy()
+    res = self.tensor.data
     return acc / (2 * res)

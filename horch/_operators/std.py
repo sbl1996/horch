@@ -14,7 +14,7 @@ class Std(Operator):
     return m
 
   def backward(self, acc, x, axis, keepdims):
-    s = self.tensor.data.copy()
+    s = self.tensor.data
     if axis is not None:
       if not keepdims:
         acc = np.expand_dims(acc, axis)

@@ -6,10 +6,13 @@ Horch is a Python toy project inspired by PyTorch and Chainer that provides one 
 ## Requirements
 - Python 3 (only 3.6 is tested)
 - NumPy
-- pytest (for test)
 
 ## Examples
 You can see some examples in [examples](https://github.com/sbl1996/horch/tree/master/examples).
+
+### Requirements
+- scikit-learn
+- torch
 
 ### Models
 - MLP

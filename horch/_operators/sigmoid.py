@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.special import expit
 
 from .operator import Operator
 
@@ -8,8 +9,9 @@ class Sigmoid(Operator):
     super().__init__(parents, args)
 
   def forward(self, x):
-    return 1 / (1 + np.exp(-x))
+    return expit(x)
 
   def backward(self, acc, x):
-    d = self.tensor.data.copy()
-    return (1 - d) * d
+    # d = self.tensor.data
+    d = expit(x)
+    return acc * (1 - d) * d

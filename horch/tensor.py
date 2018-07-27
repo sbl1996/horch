@@ -1,36 +1,37 @@
+from typing import Tuple, Any
+
 import numpy as np
+
 
 class Tensor(object):
 
-  def __init__(self, data, requires_grad=False):
+  def __init__(self, data: np.ndarray, requires_grad: bool = False) -> None:
     super().__init__()
     self.data = data
     self.grad = None
     self.requires_grad = requires_grad
-    from ._operators import Leaf
     self.op = Leaf(self, requires_grad=requires_grad)
 
   def torch(self):
     import torch
     return torch.tensor(self.data.copy(), requires_grad=self.requires_grad)
 
-  @property
-  def size(self):
+  def size(self) -> Tuple[int, ...]:
     return self.data.shape
 
-  def backward(self):
+  def backward(self) -> None:
     if self.data.size != 1:
       raise RuntimeError("grad can be created only for scalar outputs")
-    self.op._backward(np.array(1, dtype=self.data.dtype))
+    self.op._backward(np.array(1, dtype=self.data.dtype), root=True)
 
-  def zero_grad(self):
+  def zero_grad(self) -> None:
     self.op.zero_grad()
 
   @property
-  def shape(self):
+  def shape(self) -> Tuple[int, ...]:
     return self.data.shape
 
-  def item(self):
+  def item(self) -> Any:
     return self.data.item()
 
   def __truediv__(self, rt):
@@ -75,12 +76,6 @@ class Tensor(object):
   def __getitem__(self, *args):
     return _op.getitem(self, *args)
 
-  def relu(self):
-    return _op.relu(self)
-
-  def sigmoid(self):
-    return _op.sigmoid(self)
-
   def log(self):
     return _op.log(self)  
 
@@ -114,7 +109,12 @@ class Tensor(object):
   def sum(self, axis=None, keepdims=False):
     return _op.sum(self, axis=axis, keepdims=keepdims)
 
+  @property
+  def T(self):
+    return _op.transpose(self)
+
   def var(self, axis=None, keepdims=False):
     return _op.var(self, axis=axis, keepdims=keepdims)
 
 import horch._op as _op
+from horch._operators import Leaf

@@ -4,9 +4,11 @@ from .conv2d import Conv2d
 from .cross_entropy import CrossEntropy
 from .div import Div
 from .dropout import Dropout
+from .elu import ELU
 from .exp import Exp
 from .getitem import GetItem
 from .leaf import Leaf
+from .leakyrelu import LeakyReLU
 from .log import Log
 from .log_softmax import LogSoftmax
 from .matmul import MatMul
@@ -24,6 +26,7 @@ from .sqrt import Sqrt
 from .std import Std
 from .sub import Sub
 from .sum import Sum
+from .transpose import Transpose
 from .var import Var
 
 __all__ = []

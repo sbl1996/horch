@@ -1,4 +1,5 @@
 from .operator import Operator
+from ._broadcast import broadcast_backward_2
 
 class Sub(Operator):
 
@@ -10,24 +11,5 @@ class Sub(Operator):
 
   def backward(self, acc, l, r):
     lgrad = acc
-    rgrad = acc
-    ls = l.shape
-    rs = r.shape
-    lsize = l.size
-    rsize = r.size
-    if ls != rs:
-      ldim = l.ndim
-      rdim = r.ndim
-      if ldim == rdim:
-        diff_axes = tuple(filter(lambda i: ls[i] != rs[i], range(ldim)))
-        if lsize > rsize: # (10, 2, 3, 5, 6, 7) - (10, 2, 1, 5, 1, 7)
-          rgrad = acc.sum(axis=diff_axes, keepdims=True)
-        else: # (10, 2, 1, 5, 1, 7) - (10, 2, 3, 5, 6, 7)
-          lgrad = acc.sum(axis=diff_axes, keepdims=True)
-      else:
-        diff_axes = tuple(range(abs(ldim - rdim)))
-        if ldim > rdim: # (10, 2, 3, 5, 6, 7) - (3, 5, 6, 7)
-          rgrad = acc.sum(axis=diff_axes)
-        else: # (3, 5, 6, 7) - (10, 2, 3, 5, 6, 7)
-          lgrad = acc.sum(axis=diff_axes)
-    return lgrad, -rgrad
+    rgrad = -acc
+    return broadcast_backward_2(l, r, lgrad, rgrad)

@@ -44,9 +44,9 @@ val_data2 = Subset(cifar_train, np.arange(m - 200, m))
 test_data = cifar_test
 
 net = LeNetPlus()
-optimizer = SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = SGD(net.parameters(), lr=0.0003, momentum=0.9)
 
-batch_size = 32
+batch_size = 64
 data_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 epochs = 100
 for epoch in range(epochs):
@@ -65,6 +65,7 @@ for epoch in range(epochs):
   print(evaluate_dataset(net, val_data2, 64))
   print(evaluate_dataset(net, val_data, 64))
 
+# import networkx as nx
 
 # def draw(g, **kwargs):
 #   fig, ax = plt.subplots(1, 1, figsize=(8, 8))
@@ -87,4 +88,7 @@ for epoch in range(epochs):
 #   run(root)
 #   return g
 
-# nx.draw(g, labels=labels, pos=pos, font_size=12, node_color='skyblue')
+# g = computation_graph(loss.op)
+# labels = dict(g.nodes('name'))
+# pos = nx.spring_layout(g, k=0.1)
+# nx.draw(g, labels=labels, pos=pos, node_size=600, font_size=8, node_color='skyblue')

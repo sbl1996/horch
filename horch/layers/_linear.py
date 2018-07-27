@@ -3,7 +3,8 @@ from ._module import Module
 from horch import Parameter
 
 def kaiming_normal(n_in, n_out):
-  return np.random.randn(n_in, n_out) / np.sqrt(n_in / 2)
+  std = np.sqrt(2 / n_in)
+  return np.random.normal(scale=std, size=(n_in, n_out))
 
 class Linear(Module):
 

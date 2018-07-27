@@ -17,3 +17,40 @@ def test_axis():
   (H.sum(t1, axis=1) * k).sum().backward()
   grad = dm('3 3 3 ; 6 6 6')
   np.testing.assert_allclose(t1.grad, grad)
+
+def test_multi_axes():
+  a = [
+    [[  4., -10.,   7.,  24.],
+     [ -1.,   4.,  -6.,  11.],
+     [  8.,  11.,  -8.,   8.]],
+
+    [[  3., -10.,   2.,  -5.],
+     [ 10.,  18.,  -5., -15.],
+     [ -1.,  10., -13.,  17.]]
+  ]
+  a = np.array(a)
+  ha = gtensor(a)
+  # k = [
+  #   [[ 8.,  6.,  8., 10.],
+  #    [ 9.,  7.,  1.,  8.],
+  #    [ 3.,  2.,  6.,  6.]],
+
+  #   [[ 7.,  7.,  1.,  5.],
+  #    [ 3.,  5.,  5.,  3.],
+  #    [ 7.,  9.,  5., 10.]]
+  # ]
+  k = [ 1., 2., 4. ]
+  k = np.array(k)
+  hk = gtensor(k)
+  (H.sum(ha, axis=(0,2)) * hk).sum().backward()
+  grad = [
+    [[ 1., 1., 1., 1.],
+     [ 2., 2., 2., 2.],
+     [ 4., 4., 4., 4.]],
+    
+    [[ 1., 1., 1., 1.],
+     [ 2., 2., 2., 2.],
+     [ 4., 4., 4., 4.]]
+  ]
+  grad = np.array(grad)
+  np.testing.assert_allclose(ha.grad, grad)

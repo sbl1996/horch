@@ -1,6 +1,7 @@
 import numpy as np
 
 from .operator import Operator
+from .util import expand_dims
 
 class Sum(Operator):
 
@@ -14,8 +15,6 @@ class Sum(Operator):
     return m
 
   def backward(self, acc, x, axis, keepdims):
-    if axis is not None:
-      if not keepdims:
-        acc = np.expand_dims(acc, axis)
-      return acc * np.ones_like(x)
+    if axis is not None and not keepdims:
+      acc = expand_dims(acc, axis)
     return acc * np.ones_like(x)
